@@ -86,10 +86,10 @@ async def upload_files(
         s3_key = build_s3_key(current_user.id, file.filename or "document")
         document = Document(
             user_id=current_user.id,
-            file_name=file.filename or "document",
-            content_type=file.content_type or "application/octet-stream",
-            file_size=len(content),
-            s3_key=s3_key,
+            doc_name=file.filename or "document",
+            doc_type=file.content_type or "application/octet-stream",
+            doc_size_bytes=len(content),
+            raw_file_s3_key=s3_key,
             status=ProcessingStatus.pending,
         )
         db.add(document)
