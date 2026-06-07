@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: ai_document_processing_mysql
+    environment:
+      MYSQL_DATABASE: document_processing
+      MYSQL_USER: doc_user
+      MYSQL_PASSWORD: doc_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
