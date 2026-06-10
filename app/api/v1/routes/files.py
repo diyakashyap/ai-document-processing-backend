@@ -100,7 +100,7 @@ async def upload_files(
             document.status = ProcessingStatus.processing
             db.commit()
 
-            upload_original_file(content, s3_key, document.content_type)
+            upload_original_file(content, s3_key, document.doc_type)
             process_document_content(db, document, content)
         except Exception as exc:
             document.status = ProcessingStatus.failed
