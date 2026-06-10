@@ -39,7 +39,7 @@ def to_document_response(document: Document) -> DocumentResponse:
     )
 
 
-def get_owned_document(db: Session, doc_id: int, user: User) -> Document:
+def get_owned_document(db: Session, doc_id: str, user: User) -> Document:
     document = (
         db.query(Document)
         .filter(Document.id == doc_id, Document.user_id == user.id)
@@ -163,7 +163,7 @@ def get_file_download_url(
 
 @router.get("/{doc_id}/summary", response_model=DocumentSummaryResponse)
 def get_document_summary(
-    doc_id: int,
+    doc_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
