@@ -48,8 +48,13 @@ def download_original_file(key: str) -> bytes:
 
 def create_presigned_download_url(key: str) -> str:
     ensure_bucket_configured()
+
     return get_s3_client().generate_presigned_url(
         ClientMethod="get_object",
-        Params={"Bucket": settings.aws_s3_bucket_name, "Key": key},
+        Params={
+            "Bucket": settings.aws_s3_bucket_name,
+            "Key": key,
+            "ResponseContentDisposition": "attachment",
+        },
         ExpiresIn=settings.s3_presigned_url_expire_seconds,
     )
