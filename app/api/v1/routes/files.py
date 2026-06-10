@@ -60,8 +60,8 @@ def process_document_content(db: Session, document: Document, content: bytes) ->
     else:
         db.add(
             DocumentSummary(
-                document_id=document.id,
-                extracted_text=extracted_text,
+                doc_id=document.id,
+                # extracted_text=extracted_text,
                 summary_text=summary_text,
             )
         )
