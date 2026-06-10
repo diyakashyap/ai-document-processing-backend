@@ -51,7 +51,7 @@ def get_owned_document(db: Session, doc_id: int, user: User) -> Document:
 
 
 def process_document_content(db: Session, document: Document, content: bytes) -> None:
-    extracted_text = extract_text(document.file_name, content)
+    extracted_text = extract_text(document.doc_name, content)
     summary_text = summarize_text(extracted_text)
 
     if document.summary:
