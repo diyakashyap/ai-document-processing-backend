@@ -14,12 +14,11 @@ class DocumentSummaryResponse(BaseModel):
 class DocumentResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
-    file_name: str
-    content_type: str
-    file_size: int
+    id: str
+    doc_name: str
+    doc_type: str
+    doc_size_bytes: int
     status: ProcessingStatus
-    retry_count: int
     error_message: str | None
     uploaded_at: datetime
     updated_at: datetime
