@@ -6,7 +6,7 @@ from app.models.document import ProcessingStatus
 
 
 class DocumentSummaryResponse(BaseModel):
-    document_id: int
+    document_id: str
     summary_text: str
     created_at: datetime
 
