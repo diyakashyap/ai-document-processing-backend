@@ -1,0 +1,13 @@
+name : PR Validation Pipeline
+on: 
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validation:
+
+  runs-on: ubuntu-latest
+    steps:
+      - name: checkout Repository
+        users: actions/checkout@v4
