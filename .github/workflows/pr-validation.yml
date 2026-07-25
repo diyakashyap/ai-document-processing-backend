@@ -68,3 +68,30 @@ jobs:
 # it roughly performs these operations:
 
 # Authenticate to GitHub
+# ↓
+
+# Clone the repository
+
+# ↓
+
+# Checkout the correct commit
+
+# ↓
+
+# Place the files in the runner's workspace
+
+# By the end of this step, your runner looks like:
+
+# Ubuntu Runner
+
+# /home/runner/work/
+
+# AI-DOCUMENT-PROCESSING-BACKEND/
+
+# ├── app/
+# ├── Dockerfile
+# ├── requirements.txt
+# ├── README.md
+# └── .github/
+
+# Now the runner has everything it needs.
