@@ -6,7 +6,7 @@ on:
 
 jobs:
   validation:
-   runs-on: ubuntu-latest
+  runs-on: ubuntu-latest
     steps:
       - name: checkout Repository
         uses: actions/checkout@v4 #uses (Use an Action that someone has already written. Run an existing GitHub Action written by someone else)
