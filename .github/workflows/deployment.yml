@@ -1,0 +1,120 @@
+name: Backend Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 3. Install Dependencies
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 5. Login to Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 6. Build Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t ai-document-processing-backend-dev:${{ github.sha }} .
+
+      # 7. Tag Docker Image
+      - name: Tag Docker Image
+        run: |
+          docker tag \
+            ai-document-processing-backend-dev:${{ github.sha }} \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ai-document-processing-backend:${{ github.sha }}
+
+      # 8. Push Docker Image
+      - name: Push Docker Image
+        run: |
+          docker push \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ai-document-processing-backend:${{ github.sha }}
+
+      ##############################################################
+      ## READ SERVICE DEPLOYMENT
+      ##############################################################
+
+      # 9. Download Read Task Definition
+      - name: Download Read Task Definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ secrets.READ_TASK_DEFINITION }} \
+            --query taskDefinition \
+            > read-task-definition.json
+
+      # 10. Update Image in Read Task Definition
+      # (We'll implement this properly later)
+      - name: Update Read Task Definition
+        run: |
+          echo "Update image URI in read-task-definition.json"
+
+      # 11. Register Read Task Definition
+      - name: Register Read Task Definition
+        run: |
+          echo "Register new read task definition"
+
+      # 12. Deploy Read ECS Service
+      - name: Deploy Read Service
+        run: |
+          aws ecs update-service \
+            --cluster ${{ secrets.ECS_CLUSTER_NAME }} \
+            --service ${{ secrets.ECS_READ_SERVICE_NAME }} \
+            --force-new-deployment
+
+      ##############################################################
+      ## WRITE SERVICE DEPLOYMENT
+      ##############################################################
+
+      # 13. Download Write Task Definition
+      - name: Download Write Task Definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ secrets.WRITE_TASK_DEFINITION }} \
+            --query taskDefinition \
+            > write-task-definition.json
+
+      # 14. Update Image in Write Task Definition
+      - name: Update Write Task Definition
+        run: |
+          echo "Update image URI in write-task-definition.json"
+
+      # 15. Register Write Task Definition
+      - name: Register Write Task Definition
+        run: |
+          echo "Register new write task definition"
+
+      # 16. Deploy Write ECS Service
+      - name: Deploy Write Service
+        run: |
+          aws ecs update-service \
+            --cluster ${{ secrets.ECS_CLUSTER_NAME }} \
+            --service ${{ secrets.ECS_WRITE_SERVICE_NAME }} \
+            --force-new-deployment
