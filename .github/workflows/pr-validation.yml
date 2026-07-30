@@ -1,0 +1,102 @@
+name : PR Validation Pipeline
+on: 
+  pull_request: # Create PR-> Run Workflow
+    branches:
+      - main
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    steps:
+        - name: checkout Repository
+          uses: actions/checkout@v4 #uses (Use an Action that someone has already written. Run an existing GitHub Action written by someone else)
+                                  # actions/checkout (This is an Action created by GitHub. Internally it performs a git clone for you.)
+                                  # @v4 (Use version 4 of the action. This is important because it ensures that you are using a stable version of the action that has been tested and verified to work correctly.)
+        - name: Set up Python 3.12
+          uses: actions/setup-python@v4
+          with:
+            python-version: 3.12
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+# actions
+
+# This is the GitHub organization.
+
+# Think of it as:
+
+# GitHub
+
+# └── actions
+
+# GitHub maintains many official Actions.
+
+# checkout
+
+# This is the Action name.
+
+# Its job is very simple:
+
+# Download Repository
+
+# ↓
+
+# Place Repository on Runner
+
+# That's all.
+
+# @v4
+
+# This specifies the version of the Action.
+
+# Just like:
+
+# provider "aws" {
+#   version = "~> 6.0"
+# }
+
+# or
+
+# FROM python:3.12
+
+# we're saying:
+
+# Use version 4 of the Checkout Action.
+
+# What happens behind the scenes?
+
+# When GitHub reaches this step:
+
+# - uses: actions/checkout@v4
+
+# it roughly performs these operations:
+
+# Authenticate to GitHub
+# ↓
+
+# Clone the repository
+
+# ↓
+
+# Checkout the correct commit
+
+# ↓
+
+# Place the files in the runner's workspace
+
+# By the end of this step, your runner looks like:
+
+# Ubuntu Runner
+
+# /home/runner/work/
+
+# AI-DOCUMENT-PROCESSING-BACKEND/
+
+# ├── app/
+# ├── Dockerfile
+# ├── requirements.txt
+# ├── README.md
+# └── .github/
+
+# Now the runner has everything it needs.
