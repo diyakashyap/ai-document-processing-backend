@@ -52,7 +52,7 @@ jobs:
             ai-document-processing-backend-dev:${{ github.sha }} \
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ai-document-processing-backend-dev:${{ github.sha }}
 
-      # 8. Push Docker Image
+      # 8. Push Docker Image.
       - name: Push Docker Image
         run: |
           docker push \
