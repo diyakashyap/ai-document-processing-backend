@@ -10,7 +10,7 @@ jobs:
     steps:
         - name: checkout Repository
           uses: actions/checkout@v4 #uses (Use an Action that someone has already written. Run an existing GitHub Action written by someone else)
-                                    # actions/checkout (This is an Action created by GitHub. Internally it performs a git clone for you.)
+                                    # actions/checkout (This is an Action created by GitHub. Internally it performs a git clone)
                                     # @v4 (Use version 4 of the action. This is important because it ensures that you are using a stable version of the action that has been tested and verified to work correctly.)
         - name: Set up Python 3.12
           uses: actions/setup-python@v4
