@@ -1,0 +1,28 @@
+name: Auto Create Pull Request
+
+on:
+  push:
+    branches:
+      - "feature/**"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base main \
+            --head ${{ github.ref_name }} \
+            --title "Auto PR: ${{ github.ref_name }}" \
+            --body "Automatically created by GitHub Actions"
