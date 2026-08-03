@@ -1,6 +1,6 @@
 name : PR Validation Pipeline
 on: 
-  pull_request: # Create PR-> Run Workflow
+  pull_request:
     branches:
       - main
 
