@@ -1,6 +1,6 @@
 name : PR Validation Pipeline
 on: 
-  pull_request: # Create PR-> Run Workflow
+  pull_request:
     branches:
       - main
 
@@ -20,7 +20,7 @@ jobs:
           run: |
             python -m pip install --upgrade pip
             pip install -r requirements.txt
-#l
+#l1
 
 
 
