@@ -70,24 +70,24 @@ jobs:
             --query taskDefinition \
             > read-task-definition.json
 
+
       # 10. Update Image in Read Task Definition
-      # (We'll implement this properly later)
       - name: Update Read Task Definition
-        run: |
-          echo "Update image URI in read-task-definition.json"
+        id: render-read-task
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+            task-definition: read-task-definition.json
+            container-name: read-api
+            image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ai-document-processing-backend-dev:${{ github.sha }}
 
-      # 11. Register Read Task Definition
-      - name: Register Read Task Definition
-        run: |
-          echo "Register new read task definition"
-
-      # 12. Deploy Read ECS Service
-      - name: Deploy Read Service
-        run: |
-          aws ecs update-service \
-            --cluster ${{ secrets.ECS_CLUSTER_NAME }} \
-            --service ${{ secrets.ECS_READ_SERVICE_NAME }} \
-            --force-new-deployment
+      ## 11. Deploy Read Task Definition
+      - name: Deploy Read Task Definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-read-task.outputs.task-definition }}
+          service: ${{ secrets.ECS_READ_SERVICE_NAME }}
+          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true
 
       ##############################################################
       ## WRITE SERVICE DEPLOYMENT
@@ -103,18 +103,18 @@ jobs:
 
       # 14. Update Image in Write Task Definition
       - name: Update Write Task Definition
-        run: |
-          echo "Update image URI in write-task-definition.json"
+        id: render-write-task
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: write-task-definition.json
+          container-name: write-api
+          image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ai-document-processing-backend-dev:${{ github.sha }}
 
-      # 15. Register Write Task Definition
-      - name: Register Write Task Definition
-        run: |
-          echo "Register new write task definition"
-
-      # 16. Deploy Write ECS Service
-      - name: Deploy Write Service
-        run: |
-          aws ecs update-service \
-            --cluster ${{ secrets.ECS_CLUSTER_NAME }} \
-            --service ${{ secrets.ECS_WRITE_SERVICE_NAME }} \
-            --force-new-deployment
+      # 15. Deploy Write Task Definition
+      - name: Deploy Write Task Definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-write-task.outputs.task-definition }}
+          service: ${{ secrets.ECS_WRITE_SERVICE_NAME }}
+          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true
