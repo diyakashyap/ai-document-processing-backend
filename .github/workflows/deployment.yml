@@ -111,7 +111,7 @@ jobs:
           image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ai-document-processing-backend-dev:${{ github.sha }}
 
       # 15. Deploy Write Task Definition
-      - name: Deploy Write Task Definition
+      - name: Deploy Write Task Definitionaa jao na
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.render-write-task.outputs.task-definition }}
