@@ -118,3 +118,4 @@ jobs:
           service: ${{ secrets.ECS_WRITE_SERVICE_NAME }}
           cluster: ${{ secrets.ECS_CLUSTER_NAME }}
           wait-for-service-stability: true
+#123
